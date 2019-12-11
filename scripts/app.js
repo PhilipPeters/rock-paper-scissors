@@ -8,38 +8,42 @@ function computerPlay() {
 			return 'rock';
 			break
 		default:
-			return 'paper';
+			return 'paper';("scissors", computerPlay)
 		}
 }
+
+
+events = document.getElementById('events')
 
 
 function playRound(playerSelection, computerSelection) {
 	playerSelection = playerSelection.toUpperCase();
 	computerSelection = computerSelection.toUpperCase();
 	if (playerSelection === computerSelection) {
-		console.log('draw')
+		events.innerHTML = `Draw! Both players choose ${playerSelection}`
 		return 2;
 	} else {
 		switch(playerSelection) {
 			case 'SCISSORS':
 				switch(computerSelection) {
 					case 'ROCK':
-						console.log('You Lose! Rocks beats Scissors');
+						events.innerHTML = 'You Lose! Rocks beats Scissors';
 						return 0;
 						break;
 					default:
-						console.log('You Win! Scissors beats Paper');
+						console.log(playerSelection);
+						events.innerHTML = 'You Win! Scissors beats Paper';
 						return 1;
 				}
 				break;
 			case 'PAPER':
 				switch(computerSelection) {
                         case 'ROCK':
-							 console.log('You Win! Paper beats Rock');
+							 events.innerHTML = 'You Win! Paper beats Rock';
 							 return 1;
 							 break;
                 		default:
-							console.log('You Lose! Scissors beats Paper');
+							events.innerHTML = 'You Lose! Scissors beats Paper';
 							return 0;
 				}
 				break;
@@ -47,43 +51,62 @@ function playRound(playerSelection, computerSelection) {
 			case 'ROCK':
 				switch(computerSelection) {
 					case 'PAPER':
-						console.log('You Lose! Paper beats Rock');
+						events.innerHTML = 'You Lose! Paper beats Rock';
 						return 0;
 						break;
                     default:
-						console.log('You Win! Scissors beats Paper');
+						events.innerHTML= 'You Win! Rock beats Scissors';
 						return 1;
 
 				}
 				break;
-			default: 
-				console.log('invalid input');
 		}
 	}
 }
 
-function game(num) {
-	let compScore = 0;
-	let playerScore = 0;
-	while(playerScore<num && compScore <num) {
-		let player = prompt('choose');
-		let comp = computerPlay();
-		console.log(`you choose ${player}`);
-		console.log(`comp chooses ${comp}`);
-		let outcome = playRound(player, comp);
-		if (outcome == 1) {
+let compScore = 0;
+let playerScore = 0;
+yourScore = document.getElementById('yourScore');
+aiScore = document.getElementById('aiScore');
+
+function game(playerChoice, comChoice, score) {
+	if (score < 5) {
+		let outcome = playRound(playerChoice, comChoice);
+		if (outcome == 1) {  // when player winds
 			playerScore++
-			console.log('player score', playerScore);
-			console.log('comp score', compScore);
+			yourScore.innerHTML = playerScore;
 		} else if (outcome === 0) {
-			compScore++
-			console.log('comp score', compScore);
-			console.log('player score', playerScore);
-		} else {
-			console.log('comp score', compScore);
-			console.log('player score', playerScore);
+				compScore++
+				aiScore.innerHTML = compScore;
+		} else { // draw
 		}
+	} else {
+		// game over
 	}
+	
 }
 
-game(3);
+function resetScore() {
+	console.log('resetting...')
+	playerScore = 0;
+	compScore = 0;
+}
+
+
+rockChoose = document.getElementById('rock');
+paperChoose = document.getElementById('paper');
+scissorsChoose = document.getElementById('scissors');
+reset = document.getElementById('reset');
+
+rockChoose.addEventListener('click', () => {
+	game('rock', computerPlay(), Math.max(playerScore, compScore));
+});
+paperChoose.addEventListener('click', () => {
+	game('paper', computerPlay(), Math.max(playerScore, compScore));
+});
+scissorsChoose.addEventListener('click', () => {
+	game('scissors', computerPlay(), Math.max(playerScore, compScore));
+});
+
+reset.addEventListener('click', () => resetScore());
+
